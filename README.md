@@ -34,7 +34,7 @@ Download the latest release or clone the repo and run main.py with Poetry
 - Toggleable dark mode for the ui?
 - Game launch detection
 - Gamemode detection
-
+- Make a funny icon
 
 ## Acknowledgements
 

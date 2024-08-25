@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "rlbp"
+version = "0.1.0"
+description = ""
+authors = ["idunnojustletme <idunnojustletme@example.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10.6"
+buttplug-py = "^0.2.0"
+PySide6 = "^6.7.2"
+qasync = "^0.27.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

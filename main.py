@@ -81,8 +81,8 @@ class MainWindow(QtWidgets.QMainWindow):
 
 def cleanup() -> None:
     global gui, server_thread
-    asyncio.create_task(gui.intiface.disconnect())
     asyncio.create_task(gui.intiface.stop_vibrate())
+    asyncio.create_task(gui.intiface.disconnect())
     app.quit()
     gui.running = False
     server.stop()
@@ -92,6 +92,7 @@ def cleanup() -> None:
 async def main() -> None:
     global app, gui, server_thread
     app = QApplication([])
+    app.setStyle("Windows")
     gui = MainWindow()
     gui.show()
     gui.running = True

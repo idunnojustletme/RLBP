@@ -9,6 +9,7 @@ from buttplug import Client, Device, ProtocolSpec, WebsocketConnector
 
 from actuators import vibrate_all, vibrate_one
 from config import (
+    INFIFACE_IP,
     MAX_POWER,
     MAX_TIME,
     MIN_POWER,
@@ -35,7 +36,7 @@ class IntifaceManager:
         )
 
         self.connector = WebsocketConnector(
-            "ws://127.0.0.1:12345",
+            INFIFACE_IP,
             # Silence, default logger!
             logger=logging.getLogger().addHandler(NullHandler()),
         )

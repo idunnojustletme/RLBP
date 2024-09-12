@@ -121,17 +121,17 @@ class IntifaceManager:
                 and score_increase != self.previous_score_increase
                 and score_increase >= MIN_SCORE
             ):
-                self.gui.print(f"\n Score increased by {score_increase}")
+                self.gui.print("\n")
+                self.gui.print(f"Score increased by {score_increase}")
                 power = score_increase / POWER_DIVIDER
                 time = score_increase / TIME_DIVIDER
                 power = max(MIN_POWER, min(MAX_POWER, power))
                 time = max(MIN_TIME, min(MAX_TIME, time))
-
-                self.gui.print(
-                    f"Activating at {power * 100:.0f}% for {time:.1f} seconds"
-                )
-
-                asyncio.create_task(vibrate_all(self, power, time))
+                if self.client.devices:
+                    self.gui.print(
+                        f"Activating at {power * 100:.0f}% for {time:.1f} seconds"
+                    )
+                    asyncio.create_task(vibrate_all(self, power, time))
 
             self.previous_score_increase = score_increase
             await asyncio.sleep(0.1)

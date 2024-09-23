@@ -1,5 +1,5 @@
 # server.py
-
+# curl -X POST -H "Content-Type: application/json" -d '{"me":{"score":20}}' http://localhost:80
 import json
 from http.server import BaseHTTPRequestHandler, HTTPServer
 
@@ -7,8 +7,6 @@ import score
 
 score_increase = 0
 httpd = None
-
-# curl -X POST -H "Content-Type: application/json" -d '{"me":{"score":20}}' http://localhost:80
 
 
 class RequestHandler(BaseHTTPRequestHandler):
@@ -37,6 +35,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         return
 
     def get_score(self, json_data):
+        global score_increase
         if isinstance(json_data, list):
             for item in json_data:
                 if isinstance(item, dict):

@@ -8,7 +8,7 @@ Connect your buttplug to your score in Rocket League.
 
 ## Installation
 
-Download the latest release or clone the repo and run main.py with Poetry
+Download the code run main.py with Poetry
 
 ### Requirements
 

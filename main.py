@@ -79,6 +79,13 @@ class MainWindow(QtWidgets.QMainWindow):
         self.console.append(message)
 
 
+async def intiface() -> None:
+    global gui
+    await gui.intiface.config()
+    asyncio.create_task(gui.intiface.create_client())
+    asyncio.create_task(gui.intiface.score_vibrate())
+
+
 def cleanup() -> None:
     global gui, server_thread
     asyncio.create_task(gui.intiface.stop_vibrate())
@@ -96,8 +103,7 @@ async def main() -> None:
     gui = MainWindow()
     gui.show()
     gui.running = True
-    asyncio.create_task(gui.intiface.create_client())
-    asyncio.create_task(gui.intiface.score_vibrate())
+    asyncio.create_task(intiface())
     server_thread = threading.Thread(target=server.run)
     server_thread.start()
     gui.print("HTTP listener started on port 80")

@@ -8,16 +8,7 @@ from typing import Any, Optional
 from buttplug import Client, Device, ProtocolSpec, WebsocketConnector
 
 from actuators import vibrate_all, vibrate_one
-from config import (
-    INFIFACE_IP,
-    MAX_POWER,
-    MAX_TIME,
-    MIN_POWER,
-    MIN_SCORE,
-    MIN_TIME,
-    POWER_DIVIDER,
-    TIME_DIVIDER,
-)
+from load_config import load_config
 from server import get_score_increase
 
 
@@ -29,6 +20,17 @@ class IntifaceManager:
 
         self.previous_score_increase = None
 
+    async def config(self) -> None:
+        self.config = load_config()
+        self.intiface_ip = self.config["intiface_ip"]
+        self.max_power = self.config["max_power"]
+        self.max_time = self.config["max_time"]
+        self.min_power = self.config["min_power"]
+        self.min_time = self.config["min_time"]
+        self.power_divider = self.config["power_divider"]
+        self.time_divider = self.config["time_divider"]
+        self.min_score = self.config["min_score"]
+
     async def create_client(self) -> None:
         self.client = Client(
             "RLBP",
@@ -36,7 +38,7 @@ class IntifaceManager:
         )
 
         self.connector = WebsocketConnector(
-            INFIFACE_IP,
+            self.intiface_ip,
             # Silence, default logger!
             logger=logging.getLogger().addHandler(NullHandler()),
         )
@@ -119,14 +121,14 @@ class IntifaceManager:
             if (
                 score_increase is not None
                 and score_increase != self.previous_score_increase
-                and score_increase >= MIN_SCORE
+                and score_increase >= self.min_score
             ):
                 self.gui.print("\n")
                 self.gui.print(f"Score increased by {score_increase}")
-                power = score_increase / POWER_DIVIDER
-                time = score_increase / TIME_DIVIDER
-                power = max(MIN_POWER, min(MAX_POWER, power))
-                time = max(MIN_TIME, min(MAX_TIME, time))
+                power = score_increase / self.power_divider
+                time = score_increase / self.time_divider
+                power = max(self.min_power, min(self.max_power, power))
+                time = max(self.min_time, min(self.max_time, time))
                 if self.client.devices:
                     self.gui.print(
                         f"Activating at {power * 100:.0f}% for {time:.1f} seconds"

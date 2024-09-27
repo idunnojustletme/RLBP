@@ -21,15 +21,15 @@ class IntifaceManager:
         self.previous_score_increase = None
 
     async def config(self) -> None:
-        self.config = load_config()
-        self.intiface_ip = self.config["intiface_ip"]
-        self.max_power = self.config["max_power"]
-        self.max_time = self.config["max_time"]
-        self.min_power = self.config["min_power"]
-        self.min_time = self.config["min_time"]
-        self.power_divider = self.config["power_divider"]
-        self.time_divider = self.config["time_divider"]
-        self.min_score = self.config["min_score"]
+        config = load_config(self)
+        self.min_vibe_strength = config["min_vibe_strength"]
+        self.max_vibe_strength = config["max_vibe_strength"]
+        self.min_vibe_time = config["min_vibe_time"]
+        self.max_vibe_time = config["max_vibe_time"]
+        self.vibe_strength_divider = config["vibe_strength_divider"]
+        self.vibe_time_divider = config["vibe_time_divider"]
+        self.min_vibe_score = config["min_vibe_score"]
+        self.intiface_ip = config["intiface_ip"]
 
     async def create_client(self) -> None:
         self.client = Client(
@@ -87,16 +87,16 @@ class IntifaceManager:
 
     async def test_one_device(self, device: Device) -> None:
         time = 1
-        power = 0.5
+        strength = 0.5
 
         self.gui.print(f"Testing {device.name}")
         if device.actuators:
             self.gui.print(
                 f"{len(device.actuators)} generic actuator(s) found"
             )
-            self.gui.print("Activating for 1 second at 50% power")
-            self.gui.print(f"[{time = }] [{power = }]")
-            asyncio.create_task(vibrate_one(device, power, time))
+            self.gui.print("Activating for 1 second at 50% strength")
+            self.gui.print(f"[{time = }] [{strength = }]")
+            asyncio.create_task(vibrate_one(device, strength, time))
         elif device.linear_actuators:
             self.gui.print(
                 f"{len(device.linear_actuators)} linear actuator(s) found, these are unsupported in RLBP"
@@ -121,19 +121,26 @@ class IntifaceManager:
             if (
                 score_increase is not None
                 and score_increase != self.previous_score_increase
-                and score_increase >= self.min_score
+                and score_increase >= self.min_vibe_score
             ):
                 self.gui.print("\n")
                 self.gui.print(f"Score increased by {score_increase}")
-                power = score_increase / self.power_divider
-                time = score_increase / self.time_divider
-                power = max(self.min_power, min(self.max_power, power))
-                time = max(self.min_time, min(self.max_time, time))
+                strength = score_increase / self.vibe_strength_divider
+                time = score_increase / self.vibe_time_divider
+                strength = max(
+                    self.min_vibe_strength,
+                    min(self.max_vibe_strength, strength),
+                )
+                time = max(self.min_vibe_time, min(self.max_vibe_time, time))
                 if self.client.devices:
+                    print(f"{strength / 100}")
                     self.gui.print(
-                        f"Activating at {power * 100:.0f}% for {time:.1f} seconds"
+                        f"Activating at {strength:.0f}% for {time:.1f} seconds"
                     )
-                    asyncio.create_task(vibrate_all(self, power, time))
+                    # strength needs to be a float between 0.0 and 1.0
+                    asyncio.create_task(
+                        vibrate_all(self, strength / 100, time)
+                    )
 
             self.previous_score_increase = score_increase
             await asyncio.sleep(0.1)

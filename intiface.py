@@ -15,28 +15,49 @@ from server import get_score_increase
 class IntifaceManager:
     def __init__(self, gui: Any):
         self.gui: Any = gui
-        self.client: Optional[Client] = None
-        self.connector: Optional[WebsocketConnector] = None
+        self.client: Client = None
+        self.connector: WebsocketConnector = None
+        self.intiface_ip: str = "ws://127.0.0.1:12345"
 
-        self.previous_score_increase = None
+        self.previous_score_increase: Optional[int] = None
+
+        self.min_vibe_strength: int = 20
+        self.max_vibe_strength: int = 100
+        self.min_vibe_time: float = 0.5
+        self.max_vibe_time: float = 20.0
+        self.vibe_strength_divider: float = 1.5
+        self.vibe_time_divider: float = 25.0
+        self.min_vibe_score: int = 10
 
     async def config(self) -> None:
-        config = load_config(self)
-        self.min_vibe_strength = config["min_vibe_strength"]
-        self.max_vibe_strength = config["max_vibe_strength"]
-        self.min_vibe_time = config["min_vibe_time"]
-        self.max_vibe_time = config["max_vibe_time"]
-        self.vibe_strength_divider = config["vibe_strength_divider"]
-        self.vibe_time_divider = config["vibe_time_divider"]
-        self.min_vibe_score = config["min_vibe_score"]
-        self.intiface_ip = config["intiface_ip"]
+        print("Loading config.yaml file...")
+        self.gui.print("Loading config.yaml file...")
+        try:
+            config = load_config()
+            self.intiface_ip = config["intiface_ip"]
+            self.min_vibe_strength = config["min_vibe_strength"]
+            self.max_vibe_strength = config["max_vibe_strength"]
+            self.min_vibe_time = config["min_vibe_time"]
+            self.max_vibe_time = config["max_vibe_time"]
+            self.vibe_strength_divider = config["vibe_strength_divider"]
+            self.vibe_time_divider = config["vibe_time_divider"]
+            self.min_vibe_score = config["min_vibe_score"]
+        except Exception as e:
+            print(
+                f"Error loading config: {e}" "\nUsing default config values..."
+            )
+            self.gui.print(
+                f"Error loading config: {e}" "\nUsing config values..."
+            )
+            return
+        print("Config.yaml loaded")
+        self.gui.print("Config.yaml loaded")
 
     async def create_client(self) -> None:
         self.client = Client(
             "RLBP",
             ProtocolSpec.v3,
         )
-
         self.connector = WebsocketConnector(
             self.intiface_ip,
             # Silence, default logger!
@@ -133,7 +154,6 @@ class IntifaceManager:
                 )
                 time = max(self.min_vibe_time, min(self.max_vibe_time, time))
                 if self.client.devices:
-                    print(f"{strength / 100}")
                     self.gui.print(
                         f"Activating at {strength:.0f}% for {time:.1f} seconds"
                     )

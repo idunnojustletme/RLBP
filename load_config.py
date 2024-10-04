@@ -20,14 +20,14 @@ def load_config():
             "min_vibe_score": 10,
         }
 
-        # Validate config values
+        # Validate config value types
         validated_config = {}
         for key, value in config.items():
             if key not in default_config:
                 raise ValueError(f"Unknown config key: '{key}'")
             if not isinstance(value, type(default_config[key])):
                 print(
-                    f"Warning: Invalid {key} value: '{value}' (expected {type(default_config[key]).__name__}). Using default value."
+                    f"Warning: Invalid {key} value: '{value}' (expected {type(default_config[key]).__name__}). Using default value"
                 )
                 validated_config[key] = default_config[key]
             else:
@@ -38,4 +38,10 @@ def load_config():
             if key not in validated_config:
                 validated_config[key] = value
 
+        # Check that intiface_ip starts with ws://
+        for key, value in validated_config.items():
+            if key == "intiface_ip" and not value.startswith("ws://"):
+                print(
+                    f"Warning: Invalid intiface_ip value: '{value}' (expected to start with ws://). Using default value"
+                )
         return validated_config

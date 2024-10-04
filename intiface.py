@@ -17,17 +17,8 @@ class IntifaceManager:
         self.gui: Any = gui
         self.client: Client = None
         self.connector: WebsocketConnector = None
-        self.intiface_ip: str = "ws://127.0.0.1:12345"
 
         self.previous_score_increase: Optional[int] = None
-
-        self.min_vibe_strength: int = 20
-        self.max_vibe_strength: int = 100
-        self.min_vibe_time: float = 0.5
-        self.max_vibe_time: float = 20.0
-        self.vibe_strength_divider: float = 1.5
-        self.vibe_time_divider: float = 25.0
-        self.min_vibe_score: int = 10
 
     async def config(self) -> None:
         print("Loading config.yaml file...")
@@ -43,12 +34,8 @@ class IntifaceManager:
             self.vibe_time_divider = config["vibe_time_divider"]
             self.min_vibe_score = config["min_vibe_score"]
         except Exception as e:
-            print(
-                f"Error loading config: {e}" "\nUsing default config values..."
-            )
-            self.gui.print(
-                f"Error loading config: {e}" "\nUsing default config values..."
-            )
+            print(f"Failed to load config.yaml file: {e}")
+            self.gui.print(f"Failed to load config.yaml file: {e}")
             return
         print("Config.yaml loaded")
         self.gui.print("Config.yaml loaded")
@@ -66,8 +53,8 @@ class IntifaceManager:
         try:
             await self.client.connect(self.connector)
         except Exception as e:
-            print(f"{e}")
-            self.gui.print("Unable to connect to Intiface")
+            print(f"Unable to connect to Intiface: {e}")
+            self.gui.print(f"Unable to connect to Intiface: {e}")
             return
         self.gui.print("Connected to Intiface")
 

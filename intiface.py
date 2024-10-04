@@ -47,7 +47,7 @@ class IntifaceManager:
                 f"Error loading config: {e}" "\nUsing default config values..."
             )
             self.gui.print(
-                f"Error loading config: {e}" "\nUsing config values..."
+                f"Error loading config: {e}" "\nUsing default config values..."
             )
             return
         print("Config.yaml loaded")

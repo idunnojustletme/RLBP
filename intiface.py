@@ -21,8 +21,15 @@ class IntifaceManager:
         self.previous_score_increase: Optional[int] = None
 
     async def config(self) -> None:
-        print("Loading config.yaml file...")
-        self.gui.print("Loading config.yaml file...")
+        # Check for config file
+        try:
+            with open("config.yaml", "r"):
+                print("Config.yaml file found")
+                self.gui.print("Config.yaml file found")
+        except FileNotFoundError:
+            print("Config.yaml file not found")
+            self.gui.print("Config.yaml file not found")
+
         try:
             config = load_config()
             self.intiface_ip = config["intiface_ip"]
@@ -34,11 +41,11 @@ class IntifaceManager:
             self.vibe_time_divider = config["vibe_time_divider"]
             self.min_vibe_score = config["min_vibe_score"]
         except Exception as e:
-            print(f"Failed to load config.yaml file: {e}")
-            self.gui.print(f"Failed to load config.yaml file: {e}")
+            print(f"Failed to load config values: {e}")
+            self.gui.print(f"Failed to load config values: {e}")
             return
-        print("Config.yaml loaded")
-        self.gui.print("Config.yaml loaded")
+        print("Config values loaded")
+        self.gui.print("Config values loaded")
 
     async def create_client(self) -> None:
         self.client = Client(

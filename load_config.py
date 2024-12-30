@@ -2,23 +2,31 @@
 
 import yaml
 
+# Define default config values
+default_config = {
+    "intiface_ip": "ws://127.0.0.1:12345",
+    "min_vibe_strength": 20,
+    "max_vibe_strength": 100,
+    "min_vibe_time": 0.5,
+    "max_vibe_time": 20.0,
+    "vibe_strength_divider": 1.5,
+    "vibe_time_divider": 25,
+    "min_vibe_score": 10,
+}
+
 
 def load_config():
+    # Check if config file exists
+    try:
+        with open("config.yaml", "r") as f:
+            yaml.safe_load(f)
+    except FileNotFoundError:
+        print("Using default values")
+        return default_config
+
     with open("config.yaml", "r") as f:
         yaml_data = yaml.safe_load(f)
         config = yaml_data.get("config", {})
-
-        # Define default config values
-        default_config = {
-            "intiface_ip": "ws://127.0.0.1:12345",
-            "min_vibe_strength": 20,
-            "max_vibe_strength": 100,
-            "min_vibe_time": 0.5,
-            "max_vibe_time": 20.0,
-            "vibe_strength_divider": 1.5,
-            "vibe_time_divider": 25,
-            "min_vibe_score": 10,
-        }
 
         # Validate config value types
         validated_config = {}
@@ -44,4 +52,5 @@ def load_config():
                 print(
                     f"Warning: Invalid intiface_ip value: '{value}' (expected to start with ws://). Using default value"
                 )
+                validated_config[key] = default_config[key]
         return validated_config

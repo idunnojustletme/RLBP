@@ -8,7 +8,21 @@ Connect your buttplug to your score in Rocket League.
 
 ## Installation
 
-Download the code run main.py with Poetry
+### Using the exe (reccomended)
+
+1. Download the latest release .zip file
+2. Extract it
+3. Run main.exe
+
+### Running the code yourself (hard mode)
+
+1. Clone this repository ```git clone https://github.com/idunnojustletme/RLBP```
+2. Spin up a virtual enviroment in the same directory as the project (```python -m venv .venv```)
+3. Activate the virtual enviroment
+- Windows: ```.\.venv\Scripts\activate```
+- Linux/MacOS: ```source .venv/bin/activate```
+4. With the virtual enviroment active, install the dependencies with ```pip install -r requirements.txt```
+5. Run main.py (```python main.py```)
 
 ### Requirements
 
@@ -25,6 +39,8 @@ Download the code run main.py with Poetry
 4. Launch **Overwolf** and open the **Home Assistant Game Events** app
 5. Paste the server address into Webhook URL, set Throttle to 1 and click Save
 6. Launch Rocket League and enjoy! :3
+
+7. Bonus step: Check out the config.yaml file that came with the exe and adjust to your liking
 
 ## Troubleshooting
 

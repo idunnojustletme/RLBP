@@ -1,0 +1,8 @@
+buttplug-py==0.2.0
+PySide6==6.8.1
+PySide6_Addons==6.8.1
+PySide6_Essentials==6.8.1
+PyYAML==6.0.2
+qasync==0.27.1
+shiboken6==6.8.1
+websockets==14.1

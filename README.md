@@ -81,7 +81,3 @@ For device troubleshooting: **[Bluetooth Devices Guide](https://docs.intiface.co
 
 - Heavily inspired by **[BPGE](https://github.com/allanf181/BPGE)**
 - Powered by **[buttplug.io](https://buttplug.io)** and **[buttplug-py](https://github.com/Siege-Wizard/buttplug-py)**
-
-## License
-
-[MIT](https://choosealicense.com/licenses/mit/)

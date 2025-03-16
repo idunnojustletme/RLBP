@@ -1,14 +1,14 @@
-### Disclaimer
-
-This project is not endorsed by or affiliated with Overwolf, Home Assistant, or Psyonix.
-
 # Rocket League ButtPlug
 
 Connect your buttplug to your score in Rocket League.
 
+### Disclaimer
+
+This project is not endorsed by or affiliated with Overwolf, Home Assistant, or Psyonix.
+
 ## Installation
 
-### Using the exe (reccomended)
+### Using the EXE (recommended)
 
 1. Download the latest release .zip file
 2. Extract it
@@ -17,11 +17,13 @@ Connect your buttplug to your score in Rocket League.
 ### Running the code yourself (hard mode)
 
 1. Clone this repository ```git clone https://github.com/idunnojustletme/RLBP```
-2. Spin up a virtual enviroment in the same directory as the project (```python -m venv .venv```)
-3. Activate the virtual enviroment
+2. Spin up a virtual environment in the same directory as the project (```python -m venv .venv```)
+3. Activate the virtual environment
+
 - Windows: ```.\.venv\Scripts\activate```
 - Linux/MacOS: ```source .venv/bin/activate```
-4. With the virtual enviroment active, install the dependencies with ```pip install -r requirements.txt```
+
+4. With the virtual environment active, install the dependencies with ```pip install -r requirements.txt```
 5. Run main.py (```python main.py```)
 
 ### Requirements
@@ -33,14 +35,16 @@ Connect your buttplug to your score in Rocket League.
 
 ### Setup
 
+Note: Overwolf is designed for Windows, so sorry to my Linux brethren. I did all I could.
+
 1. Launch **Intiface Central**
 2. Start the Intiface server and set up your devices
 3. Launch **RLBP** and click the server address to copy it to your clipboard
 4. Launch **Overwolf** and open the **Home Assistant Game Events** app
-5. Paste the server address into Webhook URL, set Throttle to 1 and click Save
+5. Paste the server address into Webhook URL, set Throttle to 1, and click Save
 6. Launch Rocket League and enjoy! :3
 
-7. Bonus step: Check out the config.yaml file that came with the exe and adjust to your liking
+7. Bonus step: Check out the config.yaml file that came with the EXE and adjust to your liking
 
 ## Troubleshooting
 
@@ -68,7 +72,7 @@ For device troubleshooting: **[Bluetooth Devices Guide](https://docs.intiface.co
 
 - Better config system
 - Code comments
-- Use an actual json library
+- Use an actual JSON library
 - Game launch detection
 - Gamemode detection
 - Make an icon

@@ -12,7 +12,7 @@ This project is not endorsed by or affiliated with Overwolf, Home Assistant, or 
 
 1. Download the latest release .zip file
 2. Extract it
-3. Run main.exe
+3. Run main.exe as administrator
 
 ### Running the code yourself (hard mode)
 
@@ -39,12 +39,17 @@ Note: Overwolf is designed for Windows, so sorry to my Linux brethren. I did all
 
 1. Launch **Intiface Central**
 2. Start the Intiface server and set up your devices
-3. Launch **RLBP** and click the server address to copy it to your clipboard
+3. Launch **RLBP** as administrator and click the server address to copy it to your clipboard
 4. Launch **Overwolf** and open the **Home Assistant Game Events** app
 5. Paste the server address into Webhook URL, set Throttle to 1, and click Save
 6. Launch Rocket League and enjoy! :3
 
 7. Bonus step: Check out the config.yaml file that came with the EXE and adjust to your liking
+
+### Why run as Administrator?
+
+RLBP needs to listen on port 80, which is 'protected' in Windows.
+The home assistant app does not allow redirection to any other port.
 
 ## Troubleshooting
 

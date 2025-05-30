@@ -60,9 +60,9 @@ class IntifaceManager:
         )
         try:
             await self.client.connect(self.connector)
-        except Exception as e:
-            print(f"Unable to connect to Intiface: {e}")
-            self.gui.print(f"Unable to connect to Intiface: {e}")
+        except:
+            print("Unable to connect to Intiface")
+            self.gui.print("Unable to connect to Intiface")
             return
         self.gui.print("Connected to Intiface")
 
@@ -127,11 +127,11 @@ class IntifaceManager:
     async def score_vibrate(self):
         if self.listening is True:
             self.listening = False
-            self.gui.update_button4()
+            self.gui.button4.setText("Start Listening")
             return
         else:
             self.listening = True
-            self.gui.update_button4()
+            self.gui.button4.setText("Stop Listening")
 
         self.gui.print("Listening for Rocket League data")
         while True:

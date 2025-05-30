@@ -61,12 +61,6 @@ class MainWindow(QtWidgets.QMainWindow):
         self.console.setReadOnly(True)
         main_layout.addWidget(self.console)
 
-    def update_button4(self):
-        if self.intiface.listening is False:
-            self.button4.setText("Start Listening")
-        else:
-            self.button4.setText("Stop Listening")
-
     def closeEvent(self, event) -> None:
         cleanup()
         event.accept()

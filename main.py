@@ -35,41 +35,37 @@ class MainWindow(QtWidgets.QMainWindow):
             f"Server (click to copy): http://{hostname}.local/Temporary_Listen_Addresses/"
         )
         url_button.clicked.connect(
-            app.clipboard().setText(
-                f"http://{hostname}.local/Temporary_Listen_Addresses/"
-            )
+            app.clipboard().setText(f"http://{hostname}.local/Temporary_Listen_Addresses/")
         )
         main_layout.addWidget(url_button)
 
         top_row = QtWidgets.QHBoxLayout()
 
         button1 = QtWidgets.QPushButton("Reconnect")
-        button1.clicked.connect(
-            lambda: asyncio.create_task(self.intiface.reconnect())
-        )
+        button1.clicked.connect(lambda: asyncio.create_task(self.intiface.reconnect()))
         button2 = QtWidgets.QPushButton("Test Device(s)")
-        button2.clicked.connect(
-            lambda: asyncio.create_task(self.intiface.test_all_devices())
-        )
+        button2.clicked.connect(lambda: asyncio.create_task(self.intiface.test_all_devices()))
         button3 = QtWidgets.QPushButton("Stop Vibration")
-        button3.clicked.connect(
-            lambda: asyncio.create_task(self.intiface.stop_vibrate())
-        )
-        button4 = QtWidgets.QPushButton("Start Score Vibrate Task")
-        button4.clicked.connect(
-            lambda: asyncio.create_task(self.intiface.score_vibrate())
-        )
+        button3.clicked.connect(lambda: asyncio.create_task(self.intiface.stop_vibrate()))
+        self.button4 = QtWidgets.QPushButton("Start Listening")
+        self.button4.clicked.connect(lambda: asyncio.create_task(self.intiface.score_vibrate()))
 
         top_row.addWidget(button1)
         top_row.addWidget(button2)
         top_row.addWidget(button3)
-        top_row.addWidget(button4)
+        top_row.addWidget(self.button4)
 
         main_layout.addLayout(top_row)
 
         self.console = QtWidgets.QTextEdit()
         self.console.setReadOnly(True)
         main_layout.addWidget(self.console)
+
+    def update_button4(self):
+        if self.intiface.listening is False:
+            self.button4.setText("Start Listening")
+        else:
+            self.button4.setText("Stop Listening")
 
     def closeEvent(self, event) -> None:
         cleanup()

@@ -19,6 +19,7 @@ class IntifaceManager:
         self.connector: WebsocketConnector = None
 
         self.previous_score_increase: Optional[int] = None
+        self.listening: bool = False
 
     async def config(self) -> None:
         # Check for config file
@@ -94,9 +95,7 @@ class IntifaceManager:
                 for device in self.client.devices.values():
                     await self.test_one_device(device)
             else:
-                self.gui.print(
-                    "No devices found, use Intiface to manage your devices"
-                )
+                self.gui.print("No devices found, use Intiface to manage your devices")
         else:
             self.gui.print("Not connected to Intiface")
 
@@ -106,9 +105,7 @@ class IntifaceManager:
 
         self.gui.print(f"Testing {device.name}")
         if device.actuators:
-            self.gui.print(
-                f"{len(device.actuators)} generic actuator(s) found"
-            )
+            self.gui.print(f"{len(device.actuators)} generic actuator(s) found")
             self.gui.print("Activating for 1 second at 50% strength")
             self.gui.print(f"[{time = }] [{strength = }]")
             asyncio.create_task(vibrate_one(device, strength, time))
@@ -121,17 +118,27 @@ class IntifaceManager:
                 f"{len(device.rotatory_actuators)} rotatory actuator(s) found, these are unsupported in RLBP"
             )
         else:
-            self.gui.print(
-                "No actuators found, somehow. Try reconnecting your device"
-            )
+            self.gui.print("No actuators found, somehow. Try reconnecting your device")
 
     async def stop_vibrate(self):
         self.gui.print("Stopping current vibration")
         asyncio.create_task(vibrate_all(self, 0, 0))
 
     async def score_vibrate(self):
-        self.gui.print("Starting Vibrations :3")
+        if self.listening is True:
+            self.listening = False
+            self.gui.update_button4()
+            return
+        else:
+            self.listening = True
+            self.gui.update_button4()
+
+        self.gui.print("Listening for Rocket League data")
         while True:
+            if self.listening is False:
+                self.gui.print("Stopped listening")
+                return
+
             score_increase = get_score_increase()
             if (
                 score_increase is not None
@@ -148,13 +155,10 @@ class IntifaceManager:
                 )
                 time = max(self.min_vibe_time, min(self.max_vibe_time, time))
                 if self.client.devices:
-                    self.gui.print(
-                        f"Activating at {strength:.0f}% for {time:.1f} seconds"
-                    )
+                    self.gui.print(f"Activating at {strength:.0f}% for {time:.1f} seconds")
                     # strength needs to be a float between 0.0 and 1.0
-                    asyncio.create_task(
-                        vibrate_all(self, strength / 100, time)
-                    )
+                    asyncio.create_task(vibrate_all(self, strength / 100, time))
 
             self.previous_score_increase = score_increase
+
             await asyncio.sleep(0.1)

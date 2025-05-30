@@ -42,14 +42,8 @@ class RequestHandler(BaseHTTPRequestHandler):
                     self.get_score(item)
         elif isinstance(json_data, dict):
             for key, value in json_data.items():
-                if (
-                    key == "me"
-                    and isinstance(value, dict)
-                    and "score" in value
-                ):
-                    score_increase = score.calculate_score_increase(
-                        value["score"]
-                    )
+                if key == "me" and isinstance(value, dict) and "score" in value:
+                    score_increase = score.calculate_score_increase(value["score"])
                     return score_increase
                 elif isinstance(value, (dict, list)):
                     self.get_score(value)

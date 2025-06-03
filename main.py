@@ -49,11 +49,14 @@ class MainWindow(QtWidgets.QMainWindow):
         button3.clicked.connect(lambda: asyncio.create_task(self.intiface.stop_vibrate()))
         self.button4 = QtWidgets.QPushButton("Start Listening")
         self.button4.clicked.connect(lambda: asyncio.create_task(self.intiface.score_vibrate()))
+        button5 = QtWidgets.QPushButton("Reload Config")
+        button5.clicked.connect(lambda: asyncio.create_task(self.intiface.config()))
 
         top_row.addWidget(button1)
         top_row.addWidget(button2)
         top_row.addWidget(button3)
         top_row.addWidget(self.button4)
+        top_row.addWidget(button5)
 
         main_layout.addLayout(top_row)
 

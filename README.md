@@ -40,11 +40,13 @@ Note: Overwolf is designed for Windows, so sorry to my Linux brethren. I did all
 1. Launch **Intiface Central**
 2. Start the Intiface server and set up your devices
 3. Launch **RLBP** as administrator and click the server address to copy it to your clipboard
-4. Launch **Overwolf** and open the **Home Assistant Game Events** app
-5. Paste the server address into Webhook URL, set Throttle to 1, and click Save
-6. Launch Rocket League and enjoy! :3
+4. Click 'Test Device(s)' to make sure **RLBP** can communicate with your device
+5. Launch **Overwolf** and open the **Home Assistant Game Events** app
+6. Paste the server address into Webhook URL, set Throttle to 1, and click Save
+7. Click 'Start Listening' to have **RLBP** start listening for info from **HA Game Events**
+7. Launch Rocket League and enjoy! :3
 
-7. Bonus step: Check out the config.yaml file that came with the EXE and adjust to your liking
+8. Bonus step: Check out the config.yaml file that came with the EXE and adjust to your liking
 
 ### Why run as Administrator?
 
@@ -75,9 +77,8 @@ For device troubleshooting: **[Bluetooth Devices Guide](https://docs.intiface.co
 
 ## Potential improvements
 
-- Better config system
+- Allow for editing config in program
 - Code comments
-- Use an actual JSON library
 - Game launch detection
 - Gamemode detection
 - Make an icon

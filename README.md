@@ -82,6 +82,11 @@ For device troubleshooting: **[Bluetooth Devices Guide](https://docs.intiface.co
 - Game launch detection
 - Gamemode detection
 - Make an icon
+- Status indicators for
+
+1. Getting data from HA Game Events
+2. Connected to Intiface
+3. One or more devices detected
 
 ## Acknowledgements
 

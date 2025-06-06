@@ -60,7 +60,7 @@ class IntifaceManager:
         )
         try:
             await self.client.connect(self.connector)
-        except:
+        except:  # noqa: E722
             print("Unable to connect to Intiface")
             self.gui.print("Unable to connect to Intiface")
             return
@@ -145,6 +145,7 @@ class IntifaceManager:
         while True:
             if self.listening is False:
                 self.gui.print("Stopped listening for score")
+                self.stop_vibrate()
                 return
 
             score_increase = server.get_score_increase()

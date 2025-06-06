@@ -3,25 +3,25 @@
 import asyncio
 import logging
 from logging import NullHandler
-from typing import Any, Optional
 
 from buttplug import Client, Device, ProtocolSpec, WebsocketConnector
 
+import server
 from actuators import vibrate_all, vibrate_one
 from load_config import load_config
-from server import get_score_increase
 
 
 class IntifaceManager:
-    def __init__(self, gui: Any):
-        self.gui: Any = gui
-        self.client: Client = None
-        self.connector: WebsocketConnector = None
+    def __init__(self, gui):
+        self.gui = gui
+        self.client = None
+        self.connector = None
 
-        self.previous_score_increase: Optional[int] = None
-        self.listening: bool = False
+        self.previous_score_increase = None
+        self.listening = False
+        self.contact = False
 
-    async def config(self) -> None:
+    async def config(self):
         # Check for config file
         try:
             with open("config.yaml", "r"):
@@ -48,7 +48,7 @@ class IntifaceManager:
         print("Config values loaded")
         self.gui.print("Config values loaded")
 
-    async def create_client(self) -> None:
+    async def create_client(self):
         self.client = Client(
             "RLBP",
             ProtocolSpec.v3,
@@ -66,12 +66,12 @@ class IntifaceManager:
             return
         self.gui.print("Connected to Intiface")
 
-    async def disconnect(self) -> None:
+    async def disconnect(self):
         if self.client and self.client.connected:
             await self.client.disconnect()
             print("Disconnecting from Intiface")
 
-    async def reconnect(self) -> None:
+    async def reconnect(self):
         if self.client:
             if not self.client.connected:
                 self.gui.print("Attempting to connect to Intiface")
@@ -99,7 +99,7 @@ class IntifaceManager:
         else:
             self.gui.print("Not connected to Intiface")
 
-    async def test_one_device(self, device: Device) -> None:
+    async def test_one_device(self, device: Device):
         time = 1
         strength = 0.5
 
@@ -124,22 +124,30 @@ class IntifaceManager:
         self.gui.print("Stopping current vibration")
         asyncio.create_task(vibrate_all(self, 0, 0))
 
+    async def contact_status(self):
+        while self.contact is False:
+            self.server.first_contact(self)
+            if self.contact is True:
+                self.gui.print("Got something from Rocket League!")
+                return
+            asyncio.sleep(0.1)
+
     async def score_vibrate(self):
         if self.listening is True:
             self.listening = False
-            self.gui.button4.setText("Start Listening")
+            self.gui.button4.setText("Start Score Monitoring")
             return
         else:
             self.listening = True
-            self.gui.button4.setText("Stop Listening")
+            self.gui.button4.setText("Stop Score Monitoring")
 
-        self.gui.print("Listening for Rocket League data")
+        self.gui.print("Started listening for score")
         while True:
             if self.listening is False:
-                self.gui.print("Stopped listening")
+                self.gui.print("Stopped listening for score")
                 return
 
-            score_increase = get_score_increase()
+            score_increase = server.get_score_increase()
             if (
                 score_increase is not None
                 and score_increase != self.previous_score_increase

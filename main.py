@@ -3,7 +3,6 @@
 import asyncio
 import socket
 import threading
-from typing import Optional
 
 from PySide6 import QtWidgets
 from qasync import QApplication
@@ -11,17 +10,17 @@ from qasync import QApplication
 import server
 from intiface import IntifaceManager
 
-app = Optional[QApplication]
-gui: Optional[QtWidgets.QMainWindow]
-server_thread: Optional[threading.Thread]
+app = QApplication
+gui: QtWidgets.QMainWindow
+server_thread: threading.Thread
 
 
 class MainWindow(QtWidgets.QMainWindow):
-    def __init__(self) -> None:
+    def __init__(self):
         super().__init__()
         self.intiface = IntifaceManager(self)
         self.setWindowTitle("RLBP")
-        self.setGeometry(100, 100, 600, 600)
+        self.setGeometry(100, 100, 800, 800)
 
         central_widget = QtWidgets.QWidget()
         self.setCentralWidget(central_widget)
@@ -47,7 +46,7 @@ class MainWindow(QtWidgets.QMainWindow):
         button2.clicked.connect(lambda: asyncio.create_task(self.intiface.test_all_devices()))
         button3 = QtWidgets.QPushButton("Stop Vibration")
         button3.clicked.connect(lambda: asyncio.create_task(self.intiface.stop_vibrate()))
-        self.button4 = QtWidgets.QPushButton("Start Listening")
+        self.button4 = QtWidgets.QPushButton("Start Score Monitoring")
         self.button4.clicked.connect(lambda: asyncio.create_task(self.intiface.score_vibrate()))
         button5 = QtWidgets.QPushButton("Reload Config")
         button5.clicked.connect(lambda: asyncio.create_task(self.intiface.config()))
@@ -64,15 +63,15 @@ class MainWindow(QtWidgets.QMainWindow):
         self.console.setReadOnly(True)
         main_layout.addWidget(self.console)
 
-    def closeEvent(self, event) -> None:
+    def closeEvent(self, event):
         cleanup()
         event.accept()
 
-    def print(self, message: str) -> None:
+    def print(self, message: str):
         self.console.append(message)
 
 
-def cleanup() -> None:
+def cleanup():
     global gui, server_thread
     asyncio.create_task(gui.intiface.stop_vibrate())
     asyncio.create_task(gui.intiface.disconnect())
@@ -82,7 +81,7 @@ def cleanup() -> None:
     server_thread.join()
 
 
-async def main() -> None:
+async def main():
     global app, gui, server_thread
     app = QApplication([])
     app.setStyle("Windows")
@@ -94,6 +93,7 @@ async def main() -> None:
     server_thread = threading.Thread(target=server.run)
     server_thread.start()
     gui.print("HTTP listener started on port 80")
+    asyncio.create_task(gui.intiface.contact_status())
     while gui.running:
         app.processEvents()
         await asyncio.sleep(0.01)

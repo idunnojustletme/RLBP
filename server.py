@@ -5,8 +5,10 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 
 import score
 
-score_increase = 0
 httpd = None
+json_data = None
+
+score_increase = 0
 
 
 class RequestHandler(BaseHTTPRequestHandler):
@@ -18,6 +20,7 @@ class RequestHandler(BaseHTTPRequestHandler):
         return
 
     def do_POST(self):
+        global json_data
         content_length = int(self.headers["Content-Length"])
         post_data = self.rfile.read(content_length)
 
@@ -34,8 +37,8 @@ class RequestHandler(BaseHTTPRequestHandler):
             print(f"Error decoding JSON: {str(e)}")
         return
 
-    def get_score(self, json_data):
-        global score_increase
+    def get_score(self):
+        global score_increase, json_data
         if isinstance(json_data, list):
             for item in json_data:
                 if isinstance(item, dict):
@@ -48,6 +51,13 @@ class RequestHandler(BaseHTTPRequestHandler):
                 elif isinstance(value, (dict, list)):
                     self.get_score(value)
         return json_data
+
+
+def first_contact(self):
+    global json_data
+    if isinstance(json_data, list):
+        self.contact = True
+        return self.contact
 
 
 def get_score_increase():

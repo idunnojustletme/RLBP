@@ -6,7 +6,6 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import score
 
 httpd = None
-json_data = None
 
 score_increase = 0
 
@@ -14,6 +13,7 @@ score_increase = 0
 class RequestHandler(BaseHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.json_data = None
 
     # Silence, default logger!
     def log_message(self, format, *args):
@@ -37,8 +37,8 @@ class RequestHandler(BaseHTTPRequestHandler):
             print(f"Error decoding JSON: {str(e)}")
         return
 
-    def get_score(self):
-        global score_increase, json_data
+    def get_score(self, json_data):
+        global score_increase
         if isinstance(json_data, list):
             for item in json_data:
                 if isinstance(item, dict):
@@ -53,11 +53,11 @@ class RequestHandler(BaseHTTPRequestHandler):
         return json_data
 
 
-def first_contact(self):
-    global json_data
-    if isinstance(json_data, list):
-        self.contact = True
-        return self.contact
+# def first_contact(self):
+#     global json_data
+#     if isinstance(json_data, list):
+#         self.contact = True
+#         return self.contact
 
 
 def get_score_increase():

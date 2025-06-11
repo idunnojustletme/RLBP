@@ -34,7 +34,7 @@ class MainWindow(QtWidgets.QMainWindow):
             f"Server (click to copy): http://{hostname}.local/Temporary_Listen_Addresses/"
         )
         url_button.clicked.connect(
-            app.clipboard().setText(f"http://{hostname}.local/Temporary_Listen_Addresses/")
+            lambda: app.clipboard().setText(f"http://{hostname}.local/Temporary_Listen_Addresses/")
         )
         main_layout.addWidget(url_button)
 

@@ -9,3 +9,5 @@ main.spec
 dist
 oldconfig.py
 .venv/
+main.build
+main.bin

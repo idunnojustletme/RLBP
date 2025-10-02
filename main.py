@@ -48,8 +48,8 @@ class MainWindow(QtWidgets.QMainWindow):
         button3.clicked.connect(lambda: asyncio.create_task(self.intiface.stop_vibrate()))
         self.button4 = QtWidgets.QPushButton("Start Score Monitoring")
         self.button4.clicked.connect(lambda: asyncio.create_task(self.intiface.score_vibrate()))
-        button5 = QtWidgets.QPushButton("Reload Config")
-        button5.clicked.connect(lambda: asyncio.create_task(self.intiface.config()))
+        button5 = QtWidgets.QPushButton("Edit config")
+        button5.clicked.connect(lambda: asyncio.create_task(self.intiface.edit_config()))
 
         top_row.addWidget(button1)
         top_row.addWidget(button2)
@@ -88,7 +88,9 @@ async def main():
     gui = MainWindow()
     gui.show()
     gui.running = True
+
     await gui.intiface.config()
+
     asyncio.create_task(gui.intiface.create_client())
     server_thread = threading.Thread(target=server.run)
     server_thread.start()

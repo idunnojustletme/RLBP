@@ -14,7 +14,6 @@ default_config = {
     "min_vibe_score": 10,
 }
 
-
 def load_config():
     # Check if config file exists
     try:
@@ -22,6 +21,7 @@ def load_config():
             yaml.safe_load(f)
     except FileNotFoundError:
         print("Using default values")
+        save_config(default_config)
         return default_config
 
     with open("config.yaml", "r") as f:
@@ -54,3 +54,12 @@ def load_config():
                 )
                 validated_config[key] = default_config[key]
         return validated_config
+
+def save_config(config):
+  try:
+    with open("config.yaml", "w") as file:
+        yaml.dump({"config": config}, file, default_flow_style=False, sort_keys=False)
+        return True
+  except Exception as e:
+    print(f"Error saving config: {e}")
+    return False

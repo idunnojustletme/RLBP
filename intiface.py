@@ -5,11 +5,12 @@ import logging
 from logging import NullHandler
 
 from buttplug import Client, Device, ProtocolSpec, WebsocketConnector
+from PySide6 import QtWidgets
 
 import server
 from actuators import vibrate_all, vibrate_one
-from load_config import load_config
-
+from config_lib import load_config
+from config_window import ConfigEditorWindow
 
 class IntifaceManager:
     def __init__(self, gui):
@@ -48,16 +49,19 @@ class IntifaceManager:
         print("Config values loaded")
         self.gui.print("Config values loaded")
 
+    def connect_connector(self):
+        self.connector = WebsocketConnector(
+            self.intiface_ip,
+            logger=logging.getLogger().addHandler(NullHandler()),
+        )
+
     async def create_client(self):
         self.client = Client(
             "RLBP",
             ProtocolSpec.v3,
         )
-        self.connector = WebsocketConnector(
-            self.intiface_ip,
-            # Silence, default logger!
-            logger=logging.getLogger().addHandler(NullHandler()),
-        )
+        self.connect_connector()
+
         try:
             await self.client.connect(self.connector)
         except:  # noqa: E722
@@ -78,8 +82,9 @@ class IntifaceManager:
             else:
                 await self.client.disconnect()
                 self.gui.print("Disconnected from Intiface")
-
+            
             try:
+                self.connect_connector() # Recreate connector after config reload
                 await self.client.connect(self.connector)
                 if self.client.connected:
                     self.gui.print("Connected to Intiface")
@@ -171,3 +176,10 @@ class IntifaceManager:
             self.previous_score_increase = score_increase
 
             await asyncio.sleep(0.1)
+    
+    async def edit_config(self):
+        config_window = ConfigEditorWindow(self.gui)
+        result = config_window.exec()
+        
+        if result == QtWidgets.QDialog.Accepted:
+            await self.config()

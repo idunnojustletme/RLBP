@@ -27,9 +27,7 @@ class ConfigEditorWindow(QtWidgets.QDialog):
         config = self.config_data.copy()
         
         self.inputs = {}
-
-        print(f"conig test: {config}")
-        
+       
         self.inputs["intiface_ip"] = QtWidgets.QLineEdit(config.get("intiface_ip", "ws://127.0.0.1:12345"))
         form_layout.addRow("Intiface IP:", self.inputs["intiface_ip"])
         
